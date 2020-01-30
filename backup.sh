@@ -40,5 +40,5 @@ if [ "$(ls -A $backup_dir)" ]; then
     mv $new_backup $backup_dir/$new_backup
     rm -r $temp_dir
 else
-    rsync -av  $working_dir"/" backup/"B00000000000000"
+    rsync -av  $working_dir"/" backup/$new_backup
 fi
