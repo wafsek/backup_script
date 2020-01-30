@@ -20,7 +20,7 @@
   This script presumes that the backup folder and
   working folder are right next to each other and that
   the script it self is at the same dir level as them.
-  Change that before using the script. :)
+  Change that to your liking before using the script. :)
 COMMENT
 
 backup_dir="backup"
