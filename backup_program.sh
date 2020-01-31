@@ -48,12 +48,16 @@ function backup {
     if [ "$(ls -A $backup_dir)" ]; then
         mkdir $new_backup
         rsync -a  $working_dir"/" $temp_dir
+        num=$(ls $backup_dir | wc -l)
+        num=$((100/$num))
         for entry in "$backup_dir"/*
         do
           rm -r $new_backup
           rsync -a  --compare-dest=../$entry/ $temp_dir/ $new_backup
           rm -r $temp_dir
           rsync -a $new_backup/ $temp_dir
+          sum=$(($sum+$num))
+          echo $sum
         done
         mv $new_backup $backup_dir/$new_backup
         rm -r $temp_dir
@@ -68,12 +72,16 @@ function backup {
 function recovery {
 	{
 	  if [ "$(ls -A $backup_dir)" ]; then
-    mkdir $temp_dir
-    for entry in "$backup_dir"/*
-    do
-      rsync -av  --compare-dest=../$temp_dir/ $entry/ $recovery_dir
-      rm -r $temp_dir
-      rsync -av $recovery_dir/ $temp_dir/
+      mkdir $temp_dir
+      num=$(ls $backup_dir | wc -l)
+      num=$((100/$num))
+      for entry in "$backup_dir"/*
+      do
+        rsync -av  --compare-dest=../$temp_dir/ $entry/ $recovery_dir
+        rm -r $temp_dir
+        rsync -av $recovery_dir/ $temp_dir/
+        sum=$(($sum+$num))
+        echo $sum
       done
       rm -r $temp_dir
     else
@@ -101,9 +109,8 @@ case $CHOICE in
 	"2)")
 	  recovery
 	;;
-
 	"9)") exit
-        ;;
+  ;;
 esac
 done
 exit
